@@ -12,6 +12,7 @@ int main() {
     // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
     // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
     int tabuleiro[TAM][TAM]; // board representation with a 10x10 matrix
+    int valid = 1; // control variable to check if placement is valid
 
     // initialize all cells with 0 (water)
     for (int i = 0; i < TAM; i++) {
@@ -21,15 +22,64 @@ int main() {
     }
 
     // place horizontal ship of size 3 starting at row 2, col 2
+    valid = 1;
     for (int j = 0; j < TAM_NAVIO; j++) {
-        tabuleiro[2][2 + j] = 3; // mark ship cells with 3
-        printf("Horizontal ship part at: (%d, %d)\n", 2, 2 + j); // show ship coordinates
+        if (tabuleiro[2][2 + j] != 0) valid = 0; // check overlap
+    }
+    if (valid) {
+        for (int j = 0; j < TAM_NAVIO; j++) {
+            tabuleiro[2][2 + j] = 3; // mark ship cells with 3
+            printf("Horizontal ship part at: (%d, %d)\n", 2, 2 + j);
+        }
+    } else {
+        printf("Error: horizontal ship cannot be placed (overlap detected).\n");
     }
 
     // place vertical ship of size 3 starting at row 5, col 4
+    valid = 1;
     for (int i = 0; i < TAM_NAVIO; i++) {
-        tabuleiro[5 + i][4] = 3; // mark ship cells with 3
-        printf("Vertical ship part at: (%d, %d)\n", 5 + i, 4); // show ship coordinates
+        if (tabuleiro[5 + i][4] != 0) valid = 0; // check overlap
+    }
+    if (valid) {
+        for (int i = 0; i < TAM_NAVIO; i++) {
+            tabuleiro[5 + i][4] = 3;
+            printf("Vertical ship part at: (%d, %d)\n", 5 + i, 4);
+        }
+    } else {
+        printf("Error: vertical ship cannot be placed (overlap detected).\n");
+    }
+
+    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
+    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
+    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
+    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+
+    // place diagonal ship (principal diagonal direction)
+    valid = 1;
+    for (int k = 0; k < TAM_NAVIO; k++) {
+        if (tabuleiro[1 + k][1 + k] != 0) valid = 0;
+    }
+    if (valid) {
+        for (int k = 0; k < TAM_NAVIO; k++) {
+            tabuleiro[1 + k][1 + k] = 3;
+            printf("Diagonal (main) ship part at: (%d, %d)\n", 1 + k, 1 + k);
+        }
+    } else {
+        printf("Error: main diagonal ship cannot be placed (overlap detected).\n");
+    }
+
+    // place diagonal ship (secondary diagonal direction)
+    valid = 1;
+    for (int k = 0; k < TAM_NAVIO; k++) {
+        if (tabuleiro[7 - k][2 + k] != 0) valid = 0;
+    }
+    if (valid) {
+        for (int k = 0; k < TAM_NAVIO; k++) {
+            tabuleiro[7 - k][2 + k] = 3;
+            printf("Diagonal (secondary) ship part at: (%d, %d)\n", 7 - k, 2 + k);
+        }
+    } else {
+        printf("Error: secondary diagonal ship cannot be placed (overlap detected).\n");
     }
 
     // print final board state
@@ -38,34 +88,13 @@ int main() {
         for (int j = 0; j < TAM; j++) {
             printf("%d ", tabuleiro[i][j]); // print each cell
         }
-        printf("\n"); // new line after each row
+        printf("\n");
     }
 
     return 0;
 }
 
-// Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-// Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-// Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-// Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
-
 // Nível Mestre - Habilidades Especiais com Matrizes
 // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
 // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
 // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-// Exemplos de exibição das habilidades:
-// Exemplo para habilidade em cone:
-// 0 0 1 0 0
-// 0 1 1 1 0
-// 1 1 1 1 1
-
-// Exemplo para habilidade em octaedro:
-// 0 0 1 0 0
-// 0 1 1 1 0
-// 0 0 1 0 0
-
-// Exemplo para habilidade em cruz:
-// 0 0 1 0 0
-// 1 1 1 1 1
-// 0 0 1 0 0
